@@ -10,31 +10,31 @@ Union: to merge components containing p and q make the root of the smallest tree
 
 class WeightedPathCompressionQuickUnionUF:
     def __init__(self, N):
-        self.graph = [i for i in range(N)]
-        self.size = [1 for i in range(N)]
+        self.root = [i for i in range(N)]
+        self.rank = [1 for i in range(N)]
         self.N = N
     
-    def root(self, node):
-        while self.graph[node] != node:
-            self.graph[node] = self.graph[self.graph[node]]
-            node = self.graph[node]
+    def find(self, node):
+        while self.root[node] != node:
+            self.root[node] = self.root[self.root[node]]
+            node = self.root[node]
         return node
 
     def connected(self, p, q):
-        return self.root(p) == self.root(q)
+        return self.find(p) == self.find(q)
     
 
     def union(self, p, q):
-        root_p = self.root(p)
-        root_q = self.root(q)
+        root_p = self.find(p)
+        root_q = self.find(q)
         if root_p == root_q:
             return
-        if self.size[p] < self.size[q]:
-            self.graph[root_p] = root_q
-            self.size[root_q] += self.size[root_p]
+        if self.rank[p] < self.rank[q]:
+            self.root[root_p] = root_q
+            self.rank[root_q] += self.rank[root_p]
         else:
-            self.graph[root_q] = root_p
-            self.size[root_p] += self.size[root_q]
+            self.root[root_q] = root_p
+            self.rank[root_p] += self.rank[root_q]
             
          
         
@@ -42,15 +42,15 @@ class WeightedPathCompressionQuickUnionUF:
 
 g = WeightedPathCompressionQuickUnionUF(10)
 g.union(4, 3)
-print(g.graph) 
+print(g.root) 
 g.union(3, 8)
-print(g.graph)
+print(g.root)
 g.union(6, 5)
-print(g.graph)
+print(g.root)
 g.union(9, 4)
-print(g.graph)
+print(g.root)
 g.union(2, 1)
-print(g.graph)
+print(g.root)
 print(g.connected(8, 9))
 print(g.connected(5, 0))
 g.union(5, 0)

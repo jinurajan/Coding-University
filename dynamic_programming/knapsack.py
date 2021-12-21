@@ -92,7 +92,7 @@ def solve_knapsack_bottomup(profits, weights, capacity):
     if capacity <= 0 or n == 0 or len(weights) != n:
         return 0
     dp =[[0 for x in range(capacity+1)] for y in range(n)]
-    # populate the capacity = 0 columns, with '0' capacity we have '0' profit
+    # populate the capacity = 0 columns, with '0' capacity we have '0' profit. Not required since we already initialzed with 0
     # for i in range(0, n):
     #     dp[0][i] = 0
 
@@ -108,6 +108,48 @@ def solve_knapsack_bottomup(profits, weights, capacity):
             p2 = dp[i-1][c]
             dp[i][c] = max(p1, p2)
     return dp[n-1][capacity]
+
+def solve_knapsack_bottomup_1(profits, weights, capacity):
+    # with O(C) space complexity. store only the previous two rows
+    # basic checks
+    n = len(profits)
+    if capacity <= 0 or n == 0 or len(weights) != n:
+        return 0
+    dp =[[0 for x in range(capacity+1)] for y in range(2)]
+    for c in range(0, capacity+1):
+        if weights[0] <= c:
+            dp[0][c] = profits[0]
+    for i in range(1, n):
+        for c in range(1, capacity+1):
+            p1, p2 = 0, 0
+            if weights[i] <= c:
+                p1 = profits[i] + dp[(i-1) % 2][c-weights[i]]
+            p2 = dp[(i-1) % 2][c]
+            dp[i % 2][c] = max(p1, p2)
+    return dp[(n-1) % 2][capacity]
+
+def solve_knapsack_bottomup_2(profits, weights, capacity):
+    # with single array. use same array for previous and next iteration
+    # basic checks
+    n = len(profits)
+    if capacity <= 0 or n == 0 or len(weights) != n:
+        return 0
+    dp = [0 for x in range(capacity+1)]
+
+    # if we have only one weight, we will take it if it is not more than the capacity
+    for c in range(0, capacity+1):
+        if weights[0] <= c:
+            dp[c] = profits[0]
+    
+    for i in range(1, n):
+        for c in range(capacity, -1, -1):
+            p1, p2 = 0, 0
+            if weights[i] <= c:
+                p1 = profits[i] + dp[c-weights[i]]
+            p2 = dp[c]
+            dp[c] = max(p1, p2)
+    return dp[capacity]
+
 
 def solve_knapsack_bottomup_with_printing(profits, weights, capacity):
     n = len(profits)
@@ -144,7 +186,6 @@ def print_selected_elements(dp, weights, profits, capacity):
     print()
 
 
-
 print(solve_knapsack([1, 6, 10, 16], [1, 2, 3, 5], 7))
 print(solve_knapsack([1, 6, 10, 16], [1, 2, 3, 5], 6))
 
@@ -157,6 +198,12 @@ print(solve_knapsack_topdown_1([1, 6, 10, 16], [1, 2, 3, 5], 6))
 
 print(solve_knapsack_bottomup([1, 6, 10, 16], [1, 2, 3, 5], 7))
 print(solve_knapsack_bottomup([1, 6, 10, 16], [1, 2, 3, 5], 6))
+
+print(solve_knapsack_bottomup_1([1, 6, 10, 16], [1, 2, 3, 5], 7))
+print(solve_knapsack_bottomup_1([1, 6, 10, 16], [1, 2, 3, 5], 6))
+
+print(solve_knapsack_bottomup_2([1, 6, 10, 16], [1, 2, 3, 5], 7))
+print(solve_knapsack_bottomup_2([1, 6, 10, 16], [1, 2, 3, 5], 6))
 
 print(solve_knapsack_bottomup_with_printing([1, 6, 10, 16], [1, 2, 3, 5], 7))
 print(solve_knapsack_bottomup_with_printing([1, 6, 10, 16], [1, 2, 3, 5], 6))

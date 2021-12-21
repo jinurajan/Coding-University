@@ -32,7 +32,7 @@ class QuickUnionUF:
         root_q = self.find(q)
         if root_p == root_q:
             return
-        self.root[p] = root_q
+        self.root[root_p] = root_q
          
         
 

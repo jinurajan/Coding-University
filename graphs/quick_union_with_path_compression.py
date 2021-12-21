@@ -14,7 +14,6 @@ O(N)   	                O(log N) O(logN)	O(log N)
 class QuickUnionPathCompressionUF:
     def __init__(self, N):
         self.root = [i for i in range(N)]
-        self.rank = [1 for i in range(N)]
         self.N = N
     
     def find(self, node):
@@ -28,9 +27,9 @@ class QuickUnionPathCompressionUF:
     
 
     def union(self, p, q):
-        find_p = self.find(p)
-        find_q = self.find(q)
-        self.root[find_p] = find_q
+        root_p = self.find(p)
+        root_q = self.find(q)
+        self.root[root_p] = root_q
             
          
     

@@ -160,7 +160,7 @@ class Solution5:
         return provinces
 
 class Solution6:
-    # with weighted quick union with path compression
+    # with weighted quick union with path compression 47%
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         root = [i for i in range(len(isConnected))]
         rank = [1 for i in range(len(isConnected))]
